@@ -1,3 +1,6 @@
+#ifndef MAPREDUCE_H
+#define MAPREDUCE_H
+
 #include <stdlib.h>
 
 struct Pair
@@ -16,3 +19,5 @@ struct ShuffledStruct
 void mapreduce(int* arr, size_t size, struct Pair* counts, size_t num_keys,
                void (*mapper)(int*, size_t, struct Pair*),
                void (*reducer)(struct ShuffledStruct, struct Pair*));
+
+#endif // MAPREDUCE_H

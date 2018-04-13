@@ -4,28 +4,17 @@
 #include <math.h>
 
 #include "mapreduce.h"
+#include "printarray.h"
 
-
-void print_array(int* arr, size_t size)
+void read_csv(const char* fname, int* arr, size_t size)
 {
-    printf("[");
-
-    for (int i = 0; i < size - 1; ++i) {
-        printf("%d, ", arr[i]);
+    FILE* fstream = fopen(fname, "r");
+    
+    for (int i = 0; i < size; i++) {
+        fscanf(fstream, "%d,", &arr[i]);
     }
 
-    printf("%d]\n", arr[size - 1]);
-}
-
-void print_dict(struct Pair* pairs, size_t size)
-{
-    printf("{");
-
-    for (int i = 0; i < size - 1; ++i) {
-        printf("%d: %d, ", pairs[i].key, pairs[i].value);
-    }
-
-    printf("%d: %d}\n", pairs[size - 1].key, pairs[size - 1].value);
+    fclose(fstream);
 }
 
 void count(int* counts, int* arr, size_t size, int range_from, int range_to)
@@ -41,17 +30,6 @@ void count(int* counts, int* arr, size_t size, int range_from, int range_to)
         int val = arr[i];
         counts[val - range_from] += 1;
     }
-}
-
-void read_csv(const char* fname, int* arr, size_t size)
-{
-    FILE* fstream = fopen(fname, "r");
-    
-    for (int i = 0; i < size; i++) {
-        fscanf(fstream, "%d,", &arr[i]);
-    }
-
-    fclose(fstream);
 }
 
 void mapper(int* doc, size_t doc_size, struct Pair* counts)
@@ -111,15 +89,6 @@ int main(int argc, char* argv[])
     printf("Time to run sequential MapReduce: %f seconds\n", diff);
     printf("Result of sequential MapReduce:\n");
     print_dict(counts, RANGE_SIZE);
-
-
-    // int* counts = malloc(range_size * sizeof(int));
-
-    // generate_array(arr, size, range_from, range_to);
-    // count(counts, arr, size, range_from, range_to);
-
-    // print_array(arr, size);
-    // print_array(counts, range_size);
 
     free(counts);
     free(numbers);
