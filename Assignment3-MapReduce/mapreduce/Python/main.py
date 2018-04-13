@@ -9,7 +9,7 @@ import datareader
 import mapreduce
 
 
-FILE_NAME = 'input/numbers-small.csv'
+FILE_NAME = 'input/numbers.csv'
 
 
 def time_str(diff):
@@ -46,19 +46,19 @@ if __name__ == '__main__':
 
     start = time.time()
     counts = mapreduce.mapreduce_sequential(numbers, 4, mapper, reducer)
+    diff = time.time() - start
 
+    print("Time to run sequential MapReduce:", time_str(diff))
     print("Result of sequential MapReduce:")
     print(counts)
-    diff = time.time() - start
-    print("Time to run sequential MapReduce:", time_str(diff))
 
     print()
     print("Starting parallel MapReduce")
 
     start = time.time()
     counts = mapreduce.mapreduce_parallel(numbers, 4, mapper, reducer)
+    diff = time.time() - start
 
+    print("Time to run parallel MapReduce:", time_str(diff))
     print("Result of parallel MapReduce:")
     print(counts)
-    diff = time.time() - start
-    print("Time to run parallel MapReduce:", time_str(diff))

@@ -12,6 +12,13 @@ struct Pair
     int value;
 } pair;
 
+struct ShuffledStruct
+{
+    int key;
+    int* values;
+    size_t size;
+} shuffled_struct;
+
 void print_array(int* arr, size_t size)
 {
     printf("[");
@@ -49,12 +56,58 @@ void count(int* counts, int* arr, size_t size, int range_from, int range_to)
     }
 }
 
-void map(int* doc, size_t doc_size, struct Pair* counts)
+void mapper(int* doc, size_t doc_size, struct Pair* counts)
 {
     for (int i = 0; i < doc_size; ++i) {
         counts[i].key = doc[i];
         counts[i].value = 1;
     }
+}
+
+void reducer(struct ShuffledStruct shuffled, struct Pair* counts)
+{
+    counts->key = shuffled.key;
+    counts->value = 0;
+
+    for (int j = 0; j < shuffled.size; ++j) {
+        counts->value += shuffled.values[j];
+    }
+}
+
+int shuffle(struct Pair** mapped, size_t num_mappers, size_t doc_size,
+            struct ShuffledStruct* shuffled, size_t num_keys, size_t buffer_size)
+{
+    int num_inserted_keys = 0;
+    int was_this_key_inserted;
+    int k;
+
+    for (int i = 0; i < num_mappers; ++i) {
+        for (int j = 0; j < doc_size; ++j) {
+            was_this_key_inserted = 0;
+            k = 0;
+
+            while (k < num_inserted_keys && !was_this_key_inserted) {
+                if (shuffled[k].key == mapped[i][j].key) {
+                    was_this_key_inserted = 1;
+                }
+                else {
+                    ++k;
+                }
+            }
+
+            if (was_this_key_inserted) {
+                shuffled[k].values[shuffled[k].size] = 1;
+                shuffled[k].size += 1;
+            }
+            else {
+                shuffled[num_inserted_keys].key = mapped[i][j].key;
+                shuffled[num_inserted_keys].values[0] = 1;
+                shuffled[num_inserted_keys].size = 1;
+                num_inserted_keys += 1;
+            }
+        }
+    }
+    return num_inserted_keys;
 }
 
 void mapreduce(int* arr, size_t size, struct Pair* counts, size_t num_keys)
@@ -69,17 +122,34 @@ void mapreduce(int* arr, size_t size, struct Pair* counts, size_t num_keys)
     }
 
     for (int i = 0; i < num_mappers; ++i) {
-        map(arr + (i * doc_size), doc_size, mapped[i]);
+        mapper(arr + (i * doc_size), doc_size, mapped[i]);
+    }
+
+    size_t buffer_size = size;
+
+    struct ShuffledStruct* shuffled = malloc(num_keys * sizeof(shuffled_struct));
+
+    for (int i = 0; i < num_keys; ++i) {
+        shuffled[i].values = malloc(buffer_size * sizeof(int));
+    }
+
+    int num_inserted_keys = shuffle(mapped, num_mappers, doc_size,
+                                    shuffled, num_keys, buffer_size);
+
+    for (int i = 0; i < num_inserted_keys; ++i) {
+        reducer(shuffled[i], &counts[i]);
     }
 
     for (int i = 0; i < num_keys; ++i) {
-        counts[i].key = i;
-        counts[i].value = i * i;
+        free(shuffled[i].values);
     }
+
+    free(shuffled);
 
     for (int i = 0; i < num_mappers; ++i) {
         free(mapped[i]);
     }
+
     free(mapped);
 }
 
@@ -96,8 +166,8 @@ void read_csv(const char* fname, int* arr, size_t size)
 
 int main(int argc, char* argv[])
 {
-    const size_t SIZE = pow(2, 3);
-    const char* FILE_NAME = "input/numbers.csv";
+    const size_t SIZE = pow(2, 27);
+    const char* FILE_NAME = "input/numbers-big.csv";
 
     srand(time(NULL));
 
@@ -116,7 +186,14 @@ int main(int argc, char* argv[])
     printf("Time to read: %f seconds\n", diff);
 
     struct Pair* counts = malloc(10 * sizeof(pair));
+
+    start = clock();
     mapreduce(numbers, SIZE, counts, 10);
+    end = clock();
+    diff = ((double) (end - start)) / CLOCKS_PER_SEC;
+
+    printf("Time to run sequential MapReduce: %f seconds\n", diff);
+    printf("Result of sequential MapReduce:\n");
     print_dict(counts, 10);
 
 
