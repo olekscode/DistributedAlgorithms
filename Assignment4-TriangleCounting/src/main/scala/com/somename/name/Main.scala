@@ -12,7 +12,7 @@ object Main {
 
     val sc = new SparkContext(conf)
 
-    val graph = GraphLoader.edgeListFile(sc, "src/main/resources/followers.txt")
+    val graph = GraphLoader.edgeListFile(sc, "/etc/followers.txt")
       .partitionBy(PartitionStrategy.RandomVertexCut)
 
     val triCounts = MyTriangleCount.modifiedRun(graph).vertices
