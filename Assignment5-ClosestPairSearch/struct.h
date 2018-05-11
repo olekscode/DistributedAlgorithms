@@ -4,34 +4,27 @@
 #include <stdlib.h>     // size_t
 #include <float.h>      // DBL_MAX
 
-struct PointStruct
-{
+typedef struct {
     double x;
     double y;
-} point;
-typedef struct PointStruct Point;
+} Point;
 
-struct PairStruct
-{
+typedef struct {
     Point first;
     Point second;
-};
-typedef struct PairStruct Pair;
+} Pair;
 
-struct AlgReturnStruct
-{
+typedef struct {
     Point* points;
     size_t num_points;
     double distance;
     Pair closest_pair;
-};
-typedef struct AlgReturnStruct AlgReturn;
+} AlgReturn;
 
-struct BoundaryMergeReturnStruct {
+typedef struct {
     Pair closest_pair;
     double distance;
-};
-typedef struct BoundaryMergeReturnStruct BoundaryMergeReturn;
+} BoundaryMergeReturn;
 
 Point new_point(double x, double y);
 
