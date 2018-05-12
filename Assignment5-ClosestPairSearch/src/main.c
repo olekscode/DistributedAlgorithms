@@ -5,7 +5,7 @@
 #include "struct.h"       // Point, Pair
 #include "generate.h"     // generate_arr_of_rand_points
 #include "closest_pair.h" // closest_pair
-#include "timeit.h"       // timeit, TimeitReturn
+#include "timeit.h"       // ctimeit, TimeitReturn
 #include "print.h"        // print_pair, print_arr_of_points
 
 int main(int argc, char* argv[])

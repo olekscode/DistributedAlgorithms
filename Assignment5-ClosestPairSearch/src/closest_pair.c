@@ -51,7 +51,7 @@ static BoundaryMergeReturn boundary_merge(
     }
 
     for (size_t i = 0; i < size_M - MIN(7, size_M - 1); ++i) {
-        for (size_t j = 1; j <= 7; ++j) {
+        for (size_t j = 1; j <= MIN(7, size_M - i - 1); ++j) {
             double dist = euclidean_dist(M[i], M[i + j]);
             
             if (dist < min_dist) {

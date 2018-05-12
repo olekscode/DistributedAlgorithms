@@ -9,6 +9,7 @@
 
 #include "struct.h"   // Point, Pair, AlgReturn, new_point, new_pair etc.
 #include "merge.h"    // merge_by_y
+#include "print.h"
 
 // minimum and maximum macros
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
