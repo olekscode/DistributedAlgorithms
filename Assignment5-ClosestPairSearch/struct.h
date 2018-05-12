@@ -14,29 +14,9 @@ typedef struct {
     Point second;
 } Pair;
 
-typedef struct {
-    Point* points;
-    size_t num_points;
-    double distance;
-    Pair closest_pair;
-} AlgReturn;
-
-typedef struct {
-    Pair closest_pair;
-    double distance;
-} BoundaryMergeReturn;
-
 Point new_point(double x, double y);
 
 Pair new_pair(Point first, Point second);
-
-AlgReturn new_alg_return(
-    Point points[], size_t num_points,
-    double distance, Pair closest_pair);
-
-BoundaryMergeReturn new_boundary_merge_return(
-    Pair closest_pair,
-    double distance);
 
 Pair empty_pair();
 
