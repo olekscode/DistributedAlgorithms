@@ -50,7 +50,7 @@ static BoundaryMergeReturn boundary_merge(
         }
     }
 
-    for (size_t i = 0; i < size_M - MIN(7, size_M - 1); ++i) {
+    for (size_t i = 0; i < size_M - 1; ++i) {
         for (size_t j = 1; j <= MIN(7, size_M - i - 1); ++j) {
             double dist = euclidean_dist(M[i], M[i + j]);
             
@@ -94,26 +94,9 @@ static AlgReturn closest_pair_rec_seq(Point* sorted_points, size_t size)
     AlgReturn ret_left = closest_pair_rec_seq(left, middle);
     AlgReturn ret_right = closest_pair_rec_seq(right, size - middle);
 
-    // printf("L = \n");
-    // print_arr_of_points(left, middle);
-    // printf("L closest pair = \n");
-    // print_pair(ret_left.closest_pair);
-    // printf("R = \n");
-    // print_arr_of_points(right, size - middle);
-    // printf("R closest pair = \n");
-    // print_pair(ret_right.closest_pair);
-
-    // printf("L* = \n");
-    // print_arr_of_points(ret_left.points, middle);
-    // printf("R* = \n");
-    // print_arr_of_points(ret_right.points, size - middle);
-
     merge_by_y(ret_left.points, middle,
                ret_right.points, size - middle,
                sorted_points);
-
-    // printf("P* = \n");
-    // print_arr_of_points(sorted_points, size);
 
     BoundaryMergeReturn bm_ret = boundary_merge(
         sorted_points, size,
@@ -136,6 +119,8 @@ typedef struct {
     Point* points;
     size_t num_points;
 } ClosestPairArgs;
+
+static AlgReturn closest_pair_rec_par(Point* sorted_points, size_t size);
 
 void* closest_pair_rec_wrap(void* args_void)
 {
@@ -175,7 +160,7 @@ static AlgReturn closest_pair_rec_par(Point* sorted_points, size_t size)
     void* ret_void;
 
     if(pthread_create(&tid, NULL, &closest_pair_rec_wrap, &args)) {
-        fprintf(stderr, "Error creating thread\n");
+        fprintf(stderr, "Error creating lthread\n");
         exit(0);
     }
 

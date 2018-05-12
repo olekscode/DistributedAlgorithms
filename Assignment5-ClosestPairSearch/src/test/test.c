@@ -21,10 +21,37 @@ TestResult test_euclidean_dist()
     return res;
 }
 
-TestResult test_closest_pair_seq_2_points()
+TestResult template_test_closest_pair_seq(
+    char* name,
+    Point* points, size_t num_points,
+    Pair expected_pair)
 {
+    Pair pair = closest_pair_seq(points, num_points);
+
     TestResult res;
-    res.name = "test_closest_pair_seq_2_points";
+    res.name = name;
+    res.passed = equal_pairs(pair, expected_pair);
+
+    return res;
+}
+
+TestResult template_test_closest_pair_par(
+    char* name,
+    Point* points, size_t num_points,
+    Pair expected_pair)
+{
+    Pair pair = closest_pair_par(points, num_points);
+
+    TestResult res;
+    res.name = name;
+    res.passed = equal_pairs(pair, expected_pair);
+    
+    return res;
+}
+
+TestResult test_closest_pair_seq_2_pos_int_points()
+{
+    char* name = "test_closest_pair_seq_2_pos_int_points";
 
     Point points[] = {
         new_point(0, 3),
@@ -32,20 +59,71 @@ TestResult test_closest_pair_seq_2_points()
 
     size_t num_points = (size_t) sizeof(points) / sizeof(points[0]);
 
-    Pair pair = closest_pair_seq(points, num_points);
-
     Pair expected_pair = new_pair(
         new_point(0, 3),
         new_point(4, 0));
 
-    res.passed = equal_pairs(pair, expected_pair);
-    return res;
+    return template_test_closest_pair_seq(
+        name, points, num_points, expected_pair);
 }
 
-TestResult test_closest_pair_seq_5_points()
+TestResult test_closest_pair_seq_2_neg_int_points()
 {
-    TestResult res;
-    res.name = "test_closest_pair_seq_5_points";
+    char* name = "test_closest_pair_seq_2_neg_int_points";
+
+    Point points[] = {
+        new_point(0, -3),
+        new_point(-4, 0) };
+
+    size_t num_points = (size_t) sizeof(points) / sizeof(points[0]);
+
+    Pair expected_pair = new_pair(
+        new_point(0, -3),
+        new_point(-4, 0));
+
+    return template_test_closest_pair_seq(
+        name, points, num_points, expected_pair);
+}
+
+TestResult test_closest_pair_seq_2_pos_double_points()
+{
+    char* name = "test_closest_pair_seq_2_pos_double_points";
+
+    Point points[] = {
+        new_point(1.7, 1.5),
+        new_point(2.03, 0.2) };
+
+    size_t num_points = (size_t) sizeof(points) / sizeof(points[0]);
+
+    Pair expected_pair = new_pair(
+        new_point(1.7, 1.5),
+        new_point(2.03, 0.2));
+
+    return template_test_closest_pair_seq(
+        name, points, num_points, expected_pair);
+}
+
+TestResult test_closest_pair_seq_2_neg_double_points()
+{
+    char* name = "test_closest_pair_seq_2_neg_double_points";
+
+    Point points[] = {
+        new_point(-1.7, 1.5),
+        new_point(-2.03, -0.2) };
+
+    size_t num_points = (size_t) sizeof(points) / sizeof(points[0]);
+
+    Pair expected_pair = new_pair(
+        new_point(-1.7, 1.5),
+        new_point(-2.03, -0.2));
+
+    return template_test_closest_pair_seq(
+        name, points, num_points, expected_pair);
+}
+
+TestResult test_closest_pair_seq_5_pos_int_points()
+{
+    char* name = "test_closest_pair_seq_5_pos_int_points";
 
     Point points[] = {
         new_point(0, 3),
@@ -56,20 +134,124 @@ TestResult test_closest_pair_seq_5_points()
 
     size_t num_points = (size_t) sizeof(points) / sizeof(points[0]);
 
-    Pair pair = closest_pair_seq(points, num_points);
-
     Pair expected_pair = new_pair(
         new_point(3, 3),
         new_point(4, 4));
 
-    res.passed = equal_pairs(pair, expected_pair);
-    return res;
+    return template_test_closest_pair_seq(
+        name, points, num_points, expected_pair);
 }
 
-TestResult test_closest_pair_par_2_points()
+TestResult test_closest_pair_seq_5_neg_int_points()
 {
-    TestResult res;
-    res.name = "test_closest_pair_par_2_points";
+    char* name = "test_closest_pair_seq_5_neg_int_points";
+
+    Point points[] = {
+        new_point(0, -3),
+        new_point(-4, 0),
+        new_point(-3, -3),
+        new_point(-2, -5),
+        new_point(-4, -4) };
+
+    size_t num_points = (size_t) sizeof(points) / sizeof(points[0]);
+
+    Pair expected_pair = new_pair(
+        new_point(-3, -3),
+        new_point(-4, -4));
+
+    return template_test_closest_pair_seq(
+        name, points, num_points, expected_pair);
+}
+
+TestResult test_closest_pair_seq_5_pos_double_points()
+{
+    char* name = "test_closest_pair_seq_5_pos_double_points";
+
+    Point points[] = {
+        new_point(0.02, 3.01),
+        new_point(4.01, 0.01),
+        new_point(3.02, 3.01),
+        new_point(2.02, 5.01),
+        new_point(4.01, 4.01) };
+
+    size_t num_points = (size_t) sizeof(points) / sizeof(points[0]);
+
+    Pair expected_pair = new_pair(
+        new_point(3.02, 3.01),
+        new_point(4.01, 4.01));
+
+    return template_test_closest_pair_seq(
+        name, points, num_points, expected_pair);
+}
+
+TestResult test_closest_pair_seq_5_neg_double_points()
+{
+    char* name = "test_closest_pair_seq_5_neg_double_points";
+
+    Point points[] = {
+        new_point(-0.02, -3.01),
+        new_point(-4.01, -0.01),
+        new_point(-3.02, -3.01),
+        new_point(-2.02, -5.01),
+        new_point(-4.01, -4.01) };
+
+    size_t num_points = (size_t) sizeof(points) / sizeof(points[0]);
+
+    Pair expected_pair = new_pair(
+        new_point(-3.02, -3.01),
+        new_point(-4.01, -4.01));
+
+    return template_test_closest_pair_seq(
+        name, points, num_points, expected_pair);
+}
+
+TestResult test_closest_pair_seq_5_same_zero_points()
+{
+    char* name = "test_closest_pair_seq_5_same_zero_points";
+
+    Point points[] = {
+        new_point(0, 0),
+        new_point(0, 0),
+        new_point(0, 0),
+        new_point(0, 0),
+        new_point(0, 0) };
+
+    size_t num_points = (size_t) sizeof(points) / sizeof(points[0]);
+
+    Pair expected_pair = new_pair(
+        new_point(0, 0),
+        new_point(0, 0));
+
+    return template_test_closest_pair_seq(
+        name, points, num_points, expected_pair);
+}
+
+TestResult test_closest_pair_seq_5_same_nonzero_points()
+{
+    char* name = "test_closest_pair_seq_5_same_nonzero_points";
+
+    Point points[] = {
+        new_point(4, 1),
+        new_point(4, 1),
+        new_point(4, 1),
+        new_point(4, 1),
+        new_point(4, 1) };
+
+    size_t num_points = (size_t) sizeof(points) / sizeof(points[0]);
+
+    Pair expected_pair = new_pair(
+        new_point(4, 1),
+        new_point(4, 1));
+
+    return template_test_closest_pair_seq(
+        name, points, num_points, expected_pair);
+}
+
+// =============================================================================
+
+TestResult test_closest_pair_par_2_pos_int_points()
+{
+    char* name = "test_closest_pair_par_2_pos_int_points";
 
     Point points[] = {
         new_point(0, 3),
@@ -77,20 +259,71 @@ TestResult test_closest_pair_par_2_points()
 
     size_t num_points = (size_t) sizeof(points) / sizeof(points[0]);
 
-    Pair pair = closest_pair_par(points, num_points);
-
     Pair expected_pair = new_pair(
         new_point(0, 3),
         new_point(4, 0));
 
-    res.passed = equal_pairs(pair, expected_pair);
-    return res;
+    return template_test_closest_pair_par(
+        name, points, num_points, expected_pair);
 }
 
-TestResult test_closest_pair_par_5_points()
+TestResult test_closest_pair_par_2_neg_int_points()
 {
-    TestResult res;
-    res.name = "test_closest_pair_par_5_points";
+    char* name = "test_closest_pair_par_2_neg_int_points";
+
+    Point points[] = {
+        new_point(0, -3),
+        new_point(-4, 0) };
+
+    size_t num_points = (size_t) sizeof(points) / sizeof(points[0]);
+
+    Pair expected_pair = new_pair(
+        new_point(0, -3),
+        new_point(-4, 0));
+
+    return template_test_closest_pair_par(
+        name, points, num_points, expected_pair);
+}
+
+TestResult test_closest_pair_par_2_pos_double_points()
+{
+    char* name = "test_closest_pair_par_2_pos_double_points";
+
+    Point points[] = {
+        new_point(1.7, 1.5),
+        new_point(2.03, 0.2) };
+
+    size_t num_points = (size_t) sizeof(points) / sizeof(points[0]);
+
+    Pair expected_pair = new_pair(
+        new_point(1.7, 1.5),
+        new_point(2.03, 0.2));
+
+    return template_test_closest_pair_par(
+        name, points, num_points, expected_pair);
+}
+
+TestResult test_closest_pair_par_2_neg_double_points()
+{
+    char* name = "test_closest_pair_par_2_neg_double_points";
+
+    Point points[] = {
+        new_point(-1.7, 1.5),
+        new_point(-2.03, -0.2) };
+
+    size_t num_points = (size_t) sizeof(points) / sizeof(points[0]);
+
+    Pair expected_pair = new_pair(
+        new_point(-1.7, 1.5),
+        new_point(-2.03, -0.2));
+
+    return template_test_closest_pair_par(
+        name, points, num_points, expected_pair);
+}
+
+TestResult test_closest_pair_par_5_pos_int_points()
+{
+    char* name = "test_closest_pair_par_5_pos_int_points";
 
     Point points[] = {
         new_point(0, 3),
@@ -101,15 +334,120 @@ TestResult test_closest_pair_par_5_points()
 
     size_t num_points = (size_t) sizeof(points) / sizeof(points[0]);
 
-    Pair pair = closest_pair_par(points, num_points);
-
     Pair expected_pair = new_pair(
         new_point(3, 3),
         new_point(4, 4));
 
-    res.passed = equal_pairs(pair, expected_pair);
-    return res;
+    return template_test_closest_pair_par(
+        name, points, num_points, expected_pair);
 }
+
+TestResult test_closest_pair_par_5_neg_int_points()
+{
+    char* name = "test_closest_pair_par_5_neg_int_points";
+
+    Point points[] = {
+        new_point(0, -3),
+        new_point(-4, 0),
+        new_point(-3, -3),
+        new_point(-2, -5),
+        new_point(-4, -4) };
+
+    size_t num_points = (size_t) sizeof(points) / sizeof(points[0]);
+
+    Pair expected_pair = new_pair(
+        new_point(-3, -3),
+        new_point(-4, -4));
+
+    return template_test_closest_pair_par(
+        name, points, num_points, expected_pair);
+}
+
+TestResult test_closest_pair_par_5_pos_double_points()
+{
+    char* name = "test_closest_pair_par_5_pos_double_points";
+
+    Point points[] = {
+        new_point(0.02, 3.01),
+        new_point(4.01, 0.01),
+        new_point(3.02, 3.01),
+        new_point(2.02, 5.01),
+        new_point(4.01, 4.01) };
+
+    size_t num_points = (size_t) sizeof(points) / sizeof(points[0]);
+
+    Pair expected_pair = new_pair(
+        new_point(3.02, 3.01),
+        new_point(4.01, 4.01));
+
+    return template_test_closest_pair_par(
+        name, points, num_points, expected_pair);
+}
+
+TestResult test_closest_pair_par_5_neg_double_points()
+{
+    char* name = "test_closest_pair_par_5_neg_double_points";
+
+    Point points[] = {
+        new_point(-0.02, -3.01),
+        new_point(-4.01, -0.01),
+        new_point(-3.02, -3.01),
+        new_point(-2.02, -5.01),
+        new_point(-4.01, -4.01) };
+
+    size_t num_points = (size_t) sizeof(points) / sizeof(points[0]);
+
+    Pair expected_pair = new_pair(
+        new_point(-3.02, -3.01),
+        new_point(-4.01, -4.01));
+
+    return template_test_closest_pair_par(
+        name, points, num_points, expected_pair);
+}
+
+TestResult test_closest_pair_par_5_same_zero_points()
+{
+    char* name = "test_closest_pair_par_5_same_zero_points";
+
+    Point points[] = {
+        new_point(0, 0),
+        new_point(0, 0),
+        new_point(0, 0),
+        new_point(0, 0),
+        new_point(0, 0) };
+
+    size_t num_points = (size_t) sizeof(points) / sizeof(points[0]);
+
+    Pair expected_pair = new_pair(
+        new_point(0, 0),
+        new_point(0, 0));
+
+    return template_test_closest_pair_par(
+        name, points, num_points, expected_pair);
+}
+
+TestResult test_closest_pair_par_5_same_nonzero_points()
+{
+    char* name = "test_closest_pair_par_5_same_nonzero_points";
+
+    Point points[] = {
+        new_point(4, 1),
+        new_point(4, 1),
+        new_point(4, 1),
+        new_point(4, 1),
+        new_point(4, 1) };
+
+    size_t num_points = (size_t) sizeof(points) / sizeof(points[0]);
+
+    Pair expected_pair = new_pair(
+        new_point(4, 1),
+        new_point(4, 1));
+
+    return template_test_closest_pair_par(
+        name, points, num_points, expected_pair);
+}
+
+// =============================================================================
 
 TestResult test_actual_closest_pair_2_points()
 {
@@ -160,10 +498,26 @@ int main(int argc, char* argv[])
 {
     TEST* tests[] = {
         test_euclidean_dist,
-        test_closest_pair_seq_2_points,
-        test_closest_pair_seq_5_points,
-        test_closest_pair_par_2_points,
-        test_closest_pair_par_5_points,
+        test_closest_pair_seq_2_pos_int_points,
+        test_closest_pair_seq_2_neg_int_points,
+        test_closest_pair_seq_2_pos_double_points,
+        test_closest_pair_seq_2_neg_double_points,
+        test_closest_pair_seq_5_pos_int_points,
+        test_closest_pair_seq_5_neg_int_points,
+        test_closest_pair_seq_5_pos_double_points,
+        test_closest_pair_seq_5_neg_double_points,
+        test_closest_pair_seq_5_same_zero_points,
+        test_closest_pair_seq_5_same_nonzero_points,
+        test_closest_pair_par_2_pos_int_points,
+        test_closest_pair_par_2_neg_int_points,
+        test_closest_pair_par_2_pos_double_points,
+        test_closest_pair_par_2_neg_double_points,
+        test_closest_pair_par_5_pos_int_points,
+        test_closest_pair_par_5_neg_int_points,
+        test_closest_pair_par_5_pos_double_points,
+        test_closest_pair_par_5_neg_double_points,
+        test_closest_pair_par_5_same_zero_points,
+        test_closest_pair_par_5_same_nonzero_points,
         test_actual_closest_pair_2_points,
         test_actual_closest_pair_5_points
     };
