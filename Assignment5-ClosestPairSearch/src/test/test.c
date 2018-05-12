@@ -1,11 +1,11 @@
-#include <stdlib.h>          // size_t
+#include <stdlib.h>                // size_t
 
-#include "struct.h"          // Point, Pair
-#include "generate.h"        // generate_arr_of_rand_points
-#include "closest_pair.h"    // closest_pair
-#include "equal.h"           // close_dbl, equal
+#include "../main/struct.h"        // Point, Pair
+#include "../main/generate.h"      // generate_arr_of_rand_points
+#include "../main/closest_pair.h"  // closest_pair
+#include "../main/equal.h"         // close_dbl, equal
 
-#include "test_framework.h"  // TEST, TestResult, run_all
+#include "test_framework.h"        // TEST, TestResult, run_all
 
 TestResult test_euclidean_dist()
 {
